@@ -1,0 +1,45 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% block title %}pnr.me - instantly predict final pnr status and more{% endblock %}
+{%- block metas %}
+    <meta name="author" content="Salil Panikkaveettil">
+{%- endblock%}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default container" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">pnr.me</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="">pnr prediction</a></li>
+                <li><a href="http://blog.pnr.me">blog</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+{% endblock %}
+
+
+
+{% block head %}
+    {{super()}}
+    {{fixes.ie8()}}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.ico') }}">
+{% endblock %}
+
+{% block content %}
+{% endblock %}
