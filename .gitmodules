@@ -1,0 +1,3 @@
+[submodule "pnrapi"]
+	path = pnrapi
+	url = git@github.com:salilpa/pnrapi-python.git

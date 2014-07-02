@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        {% if pnr_status_result %}
+            {% if pnr_status_result.error %}
+                <p class="text-danger">{{ pnr_status_result.error }}</p>
+            {% elif pnr_status_result.status == "Success" %}
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>PNR Number</th>
+                        <th>{{ pnr_status_result.pnr }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>From Station</td>
+                        <td>{{ pnr_status_result.from }}</td>
+                    </tr>
+                    <tr>
+                        <td>To Station</td>
+                        <td>{{ pnr_status_result.to }}</td>
+                    </tr>
+                    <tr>
+                        <td>Class of Travel</td>
+                        <td>{{ pnr_status_result.class }}</td>
+                    </tr>
+                    <tr>
+                        <td>Train Number</td>
+                        <td>{{ pnr_status_result.train_number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Train Name</td>
+                        <td>{{ pnr_status_result.train_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Boarding Date</td>
+                        <td>{{ pnr_status_result.boarding_date.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Boarding Point</td>
+                        <td>{{ pnr_status_result.boarding_point }}</td>
+                    </tr>
+                    <tr>
+                        <td>Reservation up to</td>
+                        <td>{{ pnr_status_result.reserved_upto }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Passenger Number</th>
+                        <th>Booking Status</th>
+                        <th>Current Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                {% for passenger in pnr_status_result.passenger_status %}
+                    <tr>
+                        <td>passenger {{ loop.index }}</td>
+                        <td>{{ passenger.booking_status }}</td>
+                        <td>{{ passenger.current_status }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            {% endif %}
+        {% endif %}
+        {% if status_form %}
+            {{ wtf.quick_form(status_form, button_map={'submit_button': 'primary'}) }}
+        {% endif %}
+    </div>
+{% endblock %}
