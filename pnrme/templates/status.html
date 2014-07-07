@@ -1,11 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="container">
+        <h2>
+            PNR Status Check Form
+        </h2>
+        {% if status_form %}
+                {{ wtf.quick_form(status_form, button_map={'submit_button': 'primary'}) }}
+
+        {% endif %}
+
         {% if pnr_status_result %}
+            <h2>
+                PNR Status Check Result
+            </h2>
             {% if pnr_status_result.error %}
                 <p class="text-danger">{{ pnr_status_result.error }}</p>
             {% elif pnr_status_result.status == "Success" %}
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
                     <tr>
                         <th>PNR Number</th>
@@ -56,19 +67,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                {% for passenger in pnr_status_result.passenger_status %}
-                    <tr>
-                        <td>passenger {{ loop.index }}</td>
-                        <td>{{ passenger.booking_status }}</td>
-                        <td>{{ passenger.current_status }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
+                    {% for passenger in pnr_status_result.passenger_status %}
+                        <tr>
+                            <td>passenger {{ loop.index }}</td>
+                            <td>{{ passenger.booking_status }}</td>
+                            <td>{{ passenger.current_status }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
                 </table>
             {% endif %}
-        {% endif %}
-        {% if status_form %}
-            {{ wtf.quick_form(status_form, button_map={'submit_button': 'primary'}) }}
         {% endif %}
     </div>
 {% endblock %}

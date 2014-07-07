@@ -7,7 +7,7 @@ class PnrStatusForm(Form):
     pnr = IntegerField('pnr number',
                        description='10 digit pnr number',
                        validators=[Required(message='required field')])
-    submit_button = SubmitField('get pnr status')
+    submit_button = SubmitField('check pnr status')
 
     def validate_pnr(form, field):
         if len(str(field.data)) != 10:
