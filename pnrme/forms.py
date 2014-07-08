@@ -12,3 +12,13 @@ class PnrStatusForm(Form):
     def validate_pnr(form, field):
         if len(str(field.data)) != 10:
             raise ValidationError('pnr number should be of 10 digits')
+
+class PnrPredictionForm(Form):
+    pnr = IntegerField('pnr number',
+        description='10 digit pnr number',
+        validators=[Required(message='required field')])
+    submit_button = SubmitField('predict pnr charting status')
+
+    def validate_pnr(form, field):
+        if len(str(field.data)) != 10:
+            raise ValidationError('pnr number should be of 10 digits')

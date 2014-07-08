@@ -27,6 +27,7 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
                 <li {% if request.path == url_for('.status') %}class="active"{% endif %}><a href="{{ url_for('.status') }}">check pnr status</a></li>
+                <li {% if request.path == url_for('.predictor') %}class="active"{% endif %}><a href="{{ url_for('.predictor') }}">predict pnr charting status</a></li>
                 <li><a href="http://blog.pnr.me">blog</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
