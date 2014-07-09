@@ -78,10 +78,18 @@ def get_boarding_time(train_number, boarding_date, boarding_point, train_schedul
     else:
         return "Error"
 
+
 def get_train_schedule_from_db(train_number, train_schedule_db):
-    return train_schedule_db.find_one({'train_number' : train_number})
+    """
+    get the train schedule saved in the db
+    """
+    return train_schedule_db.find_one({'train_number': train_number})
+
 
 def get_train_schedule_from_server(train_number):
+    """
+    get train schedule from the server
+    """
     train = ts.TrainSchedule(train_number)
     if train.request():
         return train.get_json()

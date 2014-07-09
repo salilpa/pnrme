@@ -31,15 +31,28 @@ def predictor():
     if prediction_form.validate_on_submit():
         pnr = prediction_form.pnr.data
         pnr_status_result = pnr_status_check(str(pnr))
-        waiting_list = get_wl_number(pnr_status_result['current_status'])
-        if pnr_status_result['status'] == "Success" and waiting_list:
-            x=""
+        if pnr_status_result['status'] == "Success":
+            waiting_list = get_wl_number(pnr_status_result['passenger_status'][0]['current_status'])
+            if waiting_list:
+                #do prediction
+                return render_template(
+                    'prediction.html',
+                    prediction_form=prediction_form,
+                    pnr_status_result=pnr_status_result
+                )
+            else:
+                return render_template(
+                    'prediction.html',
+                    prediction_form=prediction_form,
+                    pnr_status_result=pnr_status_result,
+                    pnr_prediction_error="Cannot predict charting status as the ticket is already confirmed or in RAC"
+                )
         else:
             return render_template(
                 'prediction.html',
                 prediction_form=prediction_form,
                 pnr_status_result=pnr_status_result,
-                pnr_prediction_error = "Cannot predict confirmation status as the ticket is already confirmed or in RAC or there was an error in fetching pnr status"
+                pnr_prediction_error="Error in fetching pnr status"
             )
     else:
         return render_template(
