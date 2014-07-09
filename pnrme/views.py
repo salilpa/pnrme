@@ -59,3 +59,30 @@ def predictor():
             'prediction.html',
             prediction_form=prediction_form
         )
+
+
+@app.route('/trainSchedule/', methods=('GET', 'POST'))
+def train_schedule():
+    train_schedule_form = TrainScheduleForm()
+    if train_schedule_form.validate_on_submit():
+        train = train_schedule_form.train.data
+        schedule = get_train_schedule_from_db(train, db["train_schedule"])
+        if schedule is None:
+            schedule = get_train_schedule_from_server(train)
+        if schedule:
+            return render_template(
+                'schedule.html',
+                train_schedule_form=train_schedule_form,
+                schedule=schedule
+            )
+        else:
+            return render_template(
+                'schedule.html',
+                train_schedule_form=train_schedule_form,
+                schedule_error="could not find the train"
+            )
+    else:
+        return render_template(
+            'schedule.html',
+            train_schedule_form=train_schedule_form
+        )

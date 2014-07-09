@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <h2>
+            Train Schedule Form
+        </h2>
+        {% if train_schedule_form %}
+            {{ wtf.quick_form(train_schedule_form, button_map={'submit_button': 'primary'}) }}
+
+        {% endif %}
+        {% if schedule_error %}
+            <h3 class="text-danger">{{ schedule_error }}</h3>
+
+        {% endif %}
+
+        {% if schedule %}
+            <h2>
+                Train Schedule
+            </h2>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Station</th>
+                    <th>Route</th>
+                    <th>Arrival</th>
+                    <th>Departure</th>
+                    <th>Halt</th>
+                    <th>Distance</th>
+                    <th>Day</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for station in schedule.schedule %}
+                    <tr>
+                        <td>{{ station["sno"] }}</td>
+                        <td>{{ station["station code"] + " - " + station["station name"] }}</td>
+                        <td>{{ station["route number"] }}</td>
+                        <td>{{ station["arrival time"] }}</td>
+                        <td>{{ station["departure time"] }}</td>
+                        <td>{{ station["time halt"] }}</td>
+                        <td>{{ station["distance"] }}</td>
+                        <td>{{ station["day"] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

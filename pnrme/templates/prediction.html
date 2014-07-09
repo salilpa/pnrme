@@ -9,7 +9,7 @@
 
     {% endif %}
     {% if pnr_prediction_error %}
-    <p class="text-danger">{{ pnr_prediction_error }}</p>
+    <h3 class="text-danger">{{ pnr_prediction_error }}</h3>
 
     {% endif %}
 
@@ -18,7 +18,7 @@
         PNR Status Result
     </h2>
     {% if pnr_status_result.error %}
-    <p class="text-danger">{{ pnr_status_result.error }}</p>
+    <h3 class="text-danger">{{ pnr_status_result.error }}</h3>
     {% elif pnr_status_result.status == "Success" %}
     <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -62,7 +62,7 @@
         </tr>
         </tbody>
     </table>
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped table-hover">
         <thead>
         <tr>
             <th>Passenger Number</th>
