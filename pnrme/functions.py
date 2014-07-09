@@ -2,11 +2,6 @@ from pnrapi import pnrapi, train_schedule as ts
 import re
 from datetime import datetime
 
-'''
-db = MongoClient(app.config['DB_URL'])[app.config['DB']]
-train_schedule_db = db.train_schedule
-'''
-
 
 def pnr_status_check(pnr_number, retries=3):
     """
@@ -51,7 +46,7 @@ def get_prediction(array_conditions, hours_before, wl):
     """
     return False
 
-def get_boarding_time(train_number, boarding_date, boarding_point, train_schedule_db = train_db):
+def get_boarding_time(train_number, boarding_date, boarding_point, train_schedule_db):
     """
     get boarding train time from train number, date, point
     check first in database, if not available use pnr api to get train schedule
@@ -82,3 +77,13 @@ def get_boarding_time(train_number, boarding_date, boarding_point, train_schedul
             return "Error"
     else:
         return "Error"
+
+def get_train_schedule_from_db(train_number, train_schedule_db):
+    return train_schedule_db.find_one({'train_number' : train_number})
+
+def get_train_schedule_from_server(train_number):
+    train = ts.TrainSchedule(train_number)
+    if train.request():
+        return train.get_json()
+    else:
+        return None

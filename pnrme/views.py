@@ -1,4 +1,4 @@
-from . import app
+from . import app, db
 from .forms import *
 from .functions import *
 
