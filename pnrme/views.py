@@ -2,7 +2,8 @@ from . import app, db
 from .forms import *
 from .functions import *
 
-from flask import render_template
+from flask import render_template, send_file, send_from_directory
+import os
 
 @app.route('/')
 def index():
@@ -86,3 +87,18 @@ def train_schedule():
             'schedule.html',
             train_schedule_form=train_schedule_form
         )
+@app.route('/BingSiteAuth.xml')
+def bing():
+    return render_template('BingSiteAuth.xml')
+
+@app.route('/pnrme.zip')
+def pnrme_app():
+    return send_file('static/downloads/pnrme.zip')
+
+@app.route('/google92a69203eccf42a4.html')
+def google():
+    return render_template('google92a69203eccf42a4.html')
+
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'robots/robots.txt')
