@@ -4,6 +4,8 @@ from .functions import *
 
 from flask import render_template, send_file, send_from_directory
 import os
+import re
+
 
 @app.route('/')
 def index():
@@ -67,14 +69,19 @@ def train_schedule():
     train_schedule_form = TrainScheduleForm()
     if train_schedule_form.validate_on_submit():
         train = train_schedule_form.train.data
-        schedule = get_train_schedule_from_db(train, db["train_schedule"])
-        if schedule is None:
-            schedule = get_train_schedule_from_server(train)
-        if schedule:
+        train = re.sub('[^A-Za-z0-9 ]+', '', train)
+        train_number = [int(s) for s in train.split() if s.isdigit()]
+        search_result = None
+        if len(train_number) > 0:
+            train_number_db = str(train_number[0])
+            search_result = get_train_schedule_from_db(train_number_db, db["train_schedule"])
+        if search_result is None:
+            search_result = get_train_schedule_from_server(train)
+        if search_result:
             return render_template(
                 'schedule.html',
                 train_schedule_form=train_schedule_form,
-                schedule=schedule
+                search_result=search_result
             )
         else:
             return render_template(
@@ -87,6 +94,25 @@ def train_schedule():
             'schedule.html',
             train_schedule_form=train_schedule_form
         )
+
+@app.route('/trainSchedule/train/<string:train_number>')
+def train_schedule_static(train_number):
+    search_result = None
+    if len(train_number) > 0:
+        search_result = get_train_schedule_from_db(train_number, db["train_schedule"])
+    if search_result is None:
+        search_result = get_train_schedule_from_server(train_number)
+    if search_result:
+        return render_template(
+            'schedule.html',
+            search_result=search_result
+        )
+    else:
+        return render_template(
+            'schedule.html',
+            schedule_error="could not find the train"
+        )
+
 @app.route('/BingSiteAuth.xml')
 def bing():
     return render_template('BingSiteAuth.xml')

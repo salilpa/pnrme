@@ -83,14 +83,17 @@ def get_train_schedule_from_db(train_number, train_schedule_db):
     """
     get the train schedule saved in the db
     """
-    return train_schedule_db.find_one({'train_number': train_number})
+    train_schedule = train_schedule_db.find_one({'train_number': train_number})
+    if train_schedule:
+        train_schedule["return_type"] = "schedule"
+    return train_schedule
 
 
 def get_train_schedule_from_server(train_number):
     """
     get train schedule from the server
     """
-    train = ts.TrainSchedule(train_number)
+    train = ts.TrainSearch(train_number)
     if train.request():
         return train.get_json()
     else:

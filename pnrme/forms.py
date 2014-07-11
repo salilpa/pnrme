@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import ValidationError, SubmitField, IntegerField, TextField
+from wtforms import ValidationError, SubmitField, IntegerField, TextField, SelectField
 from wtforms.validators import Required
 
 
@@ -30,7 +30,3 @@ class TrainScheduleForm(Form):
         description='valid train number',
         validators=[Required(message='required field')])
     submit_button = SubmitField('get train schedule')
-
-    def validate_train(form, field):
-        if len(field.data) < 4 or len(field.data) > 5:
-            raise ValidationError('train number should have 4/5 digits')

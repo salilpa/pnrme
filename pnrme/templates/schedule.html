@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="container">
-        <h2>
-            Train Schedule Form
-        </h2>
         {% if train_schedule_form %}
+            <h2>
+                Train Schedule Form
+            </h2>
             {{ wtf.quick_form(train_schedule_form, button_map={'submit_button': 'primary'}) }}
 
         {% endif %}
@@ -12,39 +12,101 @@
             <h3 class="text-danger">{{ schedule_error }}</h3>
 
         {% endif %}
-
-        {% if schedule %}
-            <h2>
-                Train Schedule
-            </h2>
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Station</th>
-                    <th>Route</th>
-                    <th>Arrival</th>
-                    <th>Departure</th>
-                    <th>Halt</th>
-                    <th>Distance</th>
-                    <th>Day</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for station in schedule.schedule %}
+        {% if search_result %}
+            {% if search_result.return_type == "schedule" %}
+                <h2>
+                    Train Schedule
+                </h2>
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
                     <tr>
-                        <td>{{ station["sno"] }}</td>
-                        <td>{{ station["station code"] + " - " + station["station name"] }}</td>
-                        <td>{{ station["route number"] }}</td>
-                        <td>{{ station["arrival time"] }}</td>
-                        <td>{{ station["departure time"] }}</td>
-                        <td>{{ station["time halt"] }}</td>
-                        <td>{{ station["distance"] }}</td>
-                        <td>{{ station["day"] }}</td>
+                        <th>Train Name</th>
+                        <th>{{ search_result.train_name }}</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Train Number</td>
+                            <td>{{ ', '.join(search_result["train_number"]) }}</td>
+                        </tr>
+                        <tr>
+                            <td>Train Source</td>
+                            <td>{{ search_result.source }}</td>
+                        </tr>
+                        <tr>
+                            <td>Days Available</td>
+                            <td>{{ ', '.join(search_result["days available"]) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h2>
+                    Stations
+                </h2>
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Station</th>
+                        <th>Route</th>
+                        <th>Arrival</th>
+                        <th>Departure</th>
+                        <th>Halt</th>
+                        <th>Distance</th>
+                        <th>Day</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for station in search_result.schedule %}
+                        <tr>
+                            <td>{{ station["sno"] }}</td>
+                            <td>{{ station["station code"] + " - " + station["station name"] }}</td>
+                            <td>{{ station["route number"] }}</td>
+                            <td>{{ station["arrival time"] }}</td>
+                            <td>{{ station["departure time"] }}</td>
+                            <td>{{ station["time halt"] }}</td>
+                            <td>{{ station["distance"] }}</td>
+                            <td>{{ station["day"] }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% elif search_result.return_type == 'train list' %}
+                <h2>
+                    List of trains matching the query
+                </h2>
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Train Number</th>
+                        <th>Train Name</th>
+                        <th>Source</th>
+                        <th>Departure Time</th>
+                        <th>Destination</th>
+                        <th>Arrival Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for train in search_result.trains %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ train.train_number }}</td>
+                            <td>{{ train.train_name }}</td>
+                            <td>{{ train.source }}</td>
+                            <td>{{ train.departure_time }}</td>
+                            <td>{{ train.destination }}</td>
+                            <td>{{ train.arrival_time }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
         {% endif %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="{{ url_for('static', filename='js/schedule.js') }}"></script>
 {% endblock %}
