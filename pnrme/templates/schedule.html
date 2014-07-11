@@ -1,4 +1,21 @@
 {% extends "layout.html" %}
+{% block title %}
+    {% if seo_train_name %}
+        {{ seo_train_name }} Train Schedule And Train Timings
+    {% else %}
+        Indian Railways/IRCTC Time Table With Train Schedule And Train Timings
+    {% endif %}
+{% endblock %}
+{% block metas %}
+    {{ super() }}
+    {% if seo_train_name %}
+        <meta content="Check Indian Railways IRCTC online Train Schedule and Time Table of {{ seo_train_name }}.
+        Get instant indian railway train schedule/timetable enquiry online at pnr.me" name="description">
+    {% else %}
+        <meta content="Check Indian Railways IRCTC online Train Schedule and Time Table.
+        Get instant indian railway train schedule/timetable enquiry online at pnr.me" name="description">
+    {% endif %}
+{% endblock %}
 {% block content %}
     <div class="container">
         {% if train_schedule_form %}
@@ -46,7 +63,8 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Station</th>
+                        <th>Station Code</th>
+                        <th>Station Name</th>
                         <th>Route</th>
                         <th>Arrival</th>
                         <th>Departure</th>
@@ -59,7 +77,8 @@
                     {% for station in search_result.schedule %}
                         <tr>
                             <td>{{ station["sno"] }}</td>
-                            <td>{{ station["station code"] + " - " + station["station name"] }}</td>
+                            <td>{{ station["station code"] }}</td>
+                            <td>{{ station["station name"] }}</td>
                             <td>{{ station["route number"] }}</td>
                             <td>{{ station["arrival time"] }}</td>
                             <td>{{ station["departure time"] }}</td>

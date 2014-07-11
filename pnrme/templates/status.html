@@ -1,4 +1,14 @@
 {% extends "layout.html" %}
+{% block metas %}
+    {{ super() }}
+    {% if seo_train_name %}
+        <meta content="Check PNR status of rail tickets booked in {{ seo_train_name }}
+        Get instant indian railway train pnr status enquiry online at pnr.me" name="description">
+    {% else %}
+        <meta content="Check PNR status of all rail tickets booked with Indian Railways/IRCTC.
+        Get instant indian railway train pnr status enquiry online at pnr.me. Enter 10 digit pnr" name="description">
+    {% endif %}
+{% endblock %}
 {% block content %}
     <div class="container">
         <h2>

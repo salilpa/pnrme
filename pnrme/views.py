@@ -103,9 +103,13 @@ def train_schedule_static(train_number):
     if search_result is None:
         search_result = get_train_schedule_from_server(train_number)
     if search_result:
+        seo_train_name = None
+        if search_result["return_type"] == "schedule":
+            seo_train_name = (search_result["train_name"] + " - " + ', '.join(search_result["train_number"])).title()
         return render_template(
             'schedule.html',
-            search_result=search_result
+            search_result=search_result,
+            seo_train_name=seo_train_name
         )
     else:
         return render_template(
