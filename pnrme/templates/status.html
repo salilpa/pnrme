@@ -12,7 +12,7 @@
 {% block content %}
     <div class="container">
         <h2>
-            PNR Status Check Form
+            Check PNR Status
         </h2>
         {% if status_form %}
                 {{ wtf.quick_form(status_form, button_map={'submit_button': 'primary'}) }}
@@ -21,7 +21,7 @@
 
         {% if pnr_status_result %}
             <h2>
-                PNR Status Check Result
+                Current PNR Status Result
             </h2>
             {% if pnr_status_result.error %}
                 <h3 class="text-danger">{{ pnr_status_result.error }}</h3>
@@ -52,7 +52,7 @@
                     </tr>
                     <tr>
                         <td>Train Name</td>
-                        <td>{{ pnr_status_result.train_name }}</td>
+                        <td>{{ pnr_status_result.train_name.title() }}</td>
                     </tr>
                     <tr>
                         <td>Boarding Date</td>

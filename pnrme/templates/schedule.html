@@ -38,7 +38,7 @@
                     <thead>
                     <tr>
                         <th>Train Name</th>
-                        <th>{{ search_result.train_name }}</th>
+                        <th>{{ search_result.train_name.title() }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,7 +48,7 @@
                         </tr>
                         <tr>
                             <td>Train Source</td>
-                            <td>{{ search_result.source }}</td>
+                            <td>{{ search_result.source.title() }}</td>
                         </tr>
                         <tr>
                             <td>Days Available</td>
@@ -78,7 +78,7 @@
                         <tr>
                             <td>{{ station["sno"] }}</td>
                             <td>{{ station["station code"] }}</td>
-                            <td>{{ station["station name"] }}</td>
+                            <td>{{ station["station name"].title() }}</td>
                             <td>{{ station["route number"] }}</td>
                             <td>{{ station["arrival time"] }}</td>
                             <td>{{ station["departure time"] }}</td>
@@ -109,11 +109,15 @@
                     {% for train in search_result.trains %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td>{{ train.train_number }}</td>
-                            <td>{{ train.train_name }}</td>
-                            <td>{{ train.source }}</td>
+                            <td>
+                                <a href="{{ url_for('.train_schedule_static', train_number=train.train_number) }}">
+                                    {{ train.train_number }}
+                                </a>
+                            </td>
+                            <td>{{ train.train_name.title() }}</td>
+                            <td>{{ train.source.title() }}</td>
                             <td>{{ train.departure_time }}</td>
-                            <td>{{ train.destination }}</td>
+                            <td>{{ train.destination.title() }}</td>
                             <td>{{ train.arrival_time }}</td>
                         </tr>
                     {% endfor %}
