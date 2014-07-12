@@ -1,6 +1,7 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "bootstrap/fixes.html" as fixes %}
+{% import 'macros.html' as macros  %}
 {% block title %}pnr.me - instantly predict final pnr status and more{% endblock %}
 {%- block metas %}
     <meta name="author" content="Salil Panikkaveettil">
@@ -26,10 +27,10 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
-                <li {% if request.path == url_for('.status') %}class="active"{% endif %}><a href="{{ url_for('.status') }}">check pnr status</a></li>
-                <li {% if request.path == url_for('.predictor') %}class="active"{% endif %}><a href="{{ url_for('.predictor') }}">predict pnr charting status</a></li>
-                <li {% if request.path == url_for('.train_schedule') %}class="active"{% endif %}><a href="{{ url_for('.train_schedule') }}">get train schedule</a></li>
-                <li><a href="http://blog.pnr.me">blog</a></li>
+                <li {% if request.path == url_for('.status') %}class="active"{% endif %}><a href="{{ url_for('.status') }}">Check PNR Status</a></li>
+                <li {% if request.path == url_for('.predictor') %}class="active"{% endif %}><a href="{{ url_for('.predictor') }}">Predict PNR Charting Status</a></li>
+                <li {% if request.path == url_for('.train_schedule') %}class="active"{% endif %}><a href="{{ url_for('.train_schedule') }}">Get Train Schedule</a></li>
+                <li><a href="http://blog.pnr.me">Blog</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </nav>

@@ -20,7 +20,7 @@
     <div class="container">
         {% if train_schedule_form %}
             <h2>
-                Train Schedule Form
+                Get Train Schedule/Time Table
             </h2>
             {{ wtf.quick_form(train_schedule_form, button_map={'submit_button': 'primary'}) }}
 
@@ -32,7 +32,7 @@
         {% if search_result %}
             {% if search_result.return_type == "schedule" %}
                 <h2>
-                    Train Schedule
+                    Train Schedule Result
                 </h2>
                 <table class="table table-bordered table-striped table-hover">
                     <thead>

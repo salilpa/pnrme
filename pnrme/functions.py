@@ -54,9 +54,9 @@ def get_boarding_time(train_number, boarding_date, boarding_point, train_schedul
     boarding_month = boarding_date.month
     boarding_day = boarding_date.day
     boarding_year = boarding_date.year
-    train_schedule = train_schedule_db.find_one({'train_number' : train_number})
+    train_schedule = train_schedule_db.find_one({'train_number': train_number})
     if not train_schedule:
-        train = ts.TrainSchedule(train_number, boarding_month, boarding_day)
+        train = ts.TrainSearch(train_number)
         if train.request():
             train_schedule = train.get_json()
             #send a request to insert this data into db

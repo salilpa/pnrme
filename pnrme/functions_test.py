@@ -20,4 +20,5 @@ def test_get_train_schedule_from_db():
 
 def test_get_train_schedule_from_server():
     assert get_train_schedule_from_server("9999") is None
-    assert get_train_schedule_from_server("11012") is not None
+    assert get_train_schedule_from_server("11012")["return_type"] == "schedule"
+    assert get_train_schedule_from_server("himac")["return_type"] == "train list"
