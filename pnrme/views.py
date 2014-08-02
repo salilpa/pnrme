@@ -11,6 +11,7 @@ import re
 def index():
     return render_template('index.html')
 
+
 @app.route('/status', methods=('GET', 'POST'))
 def status():
     status_form = PnrStatusForm()
@@ -28,6 +29,7 @@ def status():
             status_form=status_form
         )
 
+
 @app.route('/predictor', methods=('GET', 'POST'))
 def predictor():
     prediction_form = PnrPredictionForm()
@@ -37,6 +39,7 @@ def predictor():
         if pnr_status_result['status'] == "Success":
             waiting_list = get_wl_number(pnr_status_result['passenger_status'][0]['current_status'])
             if waiting_list:
+                #get the boarding time
                 #do prediction
                 return render_template(
                     'prediction.html',
@@ -95,13 +98,12 @@ def train_schedule():
             train_schedule_form=train_schedule_form
         )
 
+
 @app.route('/trainSchedule/train/<string:train_number>')
 def train_schedule_static(train_number):
     search_result = None
     if len(train_number) > 0:
-        search_result = get_train_schedule_from_db(train_number, db["train_schedule"])
-    if search_result is None:
-        search_result = get_train_schedule_from_server(train_number)
+        search_result = get_train_schedule(train_number, db["train_schedule"])
     if search_result:
         seo_train_name = None
         if search_result["return_type"] == "schedule":
@@ -117,17 +119,21 @@ def train_schedule_static(train_number):
             schedule_error="could not find the train"
         )
 
+
 @app.route('/BingSiteAuth.xml')
 def bing():
     return render_template('BingSiteAuth.xml')
+
 
 @app.route('/pnrme.zip')
 def pnrme_app():
     return send_file('static/downloads/pnrme.zip')
 
+
 @app.route('/google92a69203eccf42a4.html')
 def google():
     return render_template('google92a69203eccf42a4.html')
+
 
 @app.route('/robots.txt')
 def robots():

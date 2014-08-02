@@ -46,20 +46,25 @@ def get_prediction(array_conditions, hours_before, wl):
     """
     return False
 
-def get_boarding_time(train_number, boarding_date, boarding_point, train_schedule_db):
+
+def get_train_schedule(train_number, train_schedule_db):
     """
-    get boarding train time from train number, date, point
-    check first in database, if not available use pnr api to get train schedule
+    check first in database, if not available use train search api to get train schedule
+    """
+    train_schedule = get_train_schedule_from_db(train_number, train_schedule_db)
+    if not train_schedule:
+        train_schedule = get_train_schedule_from_server(train_number)
+    return train_schedule
+
+
+def get_boarding_time(boarding_date, boarding_point, train_schedule):
+    """
+    get boarding train time from schedule, boarding point and schedule
+    loop through stations and use it to create exact time
     """
     boarding_month = boarding_date.month
     boarding_day = boarding_date.day
     boarding_year = boarding_date.year
-    train_schedule = train_schedule_db.find_one({'train_number': train_number})
-    if not train_schedule:
-        train = ts.TrainSearch(train_number)
-        if train.request():
-            train_schedule = train.get_json()
-            #send a request to insert this data into db
     if train_schedule:
         arrival_time = ""
         for station in train_schedule['schedule']:
@@ -71,12 +76,12 @@ def get_boarding_time(train_number, boarding_date, boarding_point, train_schedul
         if arrival_time:
             boarding_hour = int(arrival_time.split(':')[0])
             boarding_minute = int(arrival_time.split(':')[1])
-            time = datetime( boarding_year, boarding_month, boarding_day, boarding_hour, boarding_minute)
+            time = datetime(boarding_year, boarding_month, boarding_day, boarding_hour, boarding_minute)
             return time
         else:
-            return "Error"
+            return None
     else:
-        return "Error"
+        return None
 
 
 def get_train_schedule_from_db(train_number, train_schedule_db):
