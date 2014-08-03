@@ -1,6 +1,7 @@
 from pnrapi import pnrapi, train_schedule as ts
 import re
 from datetime import datetime
+import json
 
 
 def pnr_status_check(pnr_number, retries=3):
@@ -28,23 +29,33 @@ def pnr_status_check(pnr_number, retries=3):
             else:
                 return result
 
-def get_wl_number(wlValue):
+
+def get_wl_number(wl_value):
     """
     get the waiting list number from current status
     """
-    if not isinstance(wlValue, str) and not isinstance(wlValue, unicode):
+    if not isinstance(wl_value, str) and not isinstance(wl_value, unicode):
         return ""
     wl_re = re.compile("W/L ([\d]*)$")
-    if wl_re.findall(wlValue):
-        return int(wl_re.findall(wlValue)[0])
+    if wl_re.findall(wl_value):
+        return int(wl_re.findall(wl_value)[0])
     else:
         return ""
 
-def get_prediction(array_conditions, hours_before, wl):
+
+def get_prediction(array_conditions, hours_before, wl, socket):
     """
     predict from the given conditions, hours_before and wl, probability of getting a confirmed ticket
     """
-    return False
+    parameters = {
+        "conditions": array_conditions,
+        "hours_before": hours_before,
+        "waiting_list": wl
+    }
+    socket.send(json.dumps(parameters))
+    message_predictor = socket.recv()
+    individual_prediction = json.loads(message_predictor)
+    return individual_prediction
 
 
 def get_train_schedule(train_number, train_schedule_db):
@@ -103,3 +114,28 @@ def get_train_schedule_from_server(train_number):
         return train.get_json()
     else:
         return None
+
+
+def get_hours(time1, time2):
+    """
+    get time difference between t1 and t2
+    """
+    if type(time1) is not datetime or type(time2) is not datetime:
+        return 0
+    if time1 > time2:
+        return int((time1 - time2).total_seconds()/3600)
+    else:
+        return 0
+
+
+def get_quota_from_pnr(booking_status):
+    """
+    get the quota under which ticket booking is made
+    """
+    if not isinstance(booking_status, str) and not isinstance(booking_status, unicode):
+        return None
+    quota_re = re.compile(",([A-Z]*)$")
+    quota = None
+    if quota_re.findall(booking_status):
+        quota = str(quota_re.findall(booking_status)[0])
+    return quota

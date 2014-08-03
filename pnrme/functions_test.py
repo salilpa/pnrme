@@ -38,3 +38,27 @@ def test_get_boarding_time():
     assert boarding_time == datetime(2020, 11, 16, 11, 52)
     assert boarding_time_wrong is None
     assert boarding_time_no_schedule is None
+
+
+def test_get_hours():
+    assert get_hours(datetime.now(), datetime.now()) is 0
+    assert get_hours(datetime(2020, 11, 16, 11, 52), datetime(2020, 11, 16, 7, 52)) is 4
+
+
+def test_get_quota_from_pnr():
+    pqwl = get_quota_from_pnr("W/L 54,PQWL")
+    pq = get_quota_from_pnr("S6 , 21,PQ")
+    gn = get_quota_from_pnr("SE1 , 41,GN")
+    ss = get_quota_from_pnr("B1 , 60,SS")
+    random = get_quota_from_pnr("blah blah")
+    int_input = get_quota_from_pnr(1236456)
+    assert pqwl == "PQWL"
+    assert pq == "PQ"
+    assert gn == "GN"
+    assert ss == "SS"
+    assert random == ""
+    assert int_input == ""
+
+
+def test_get_prediction():
+    assert True

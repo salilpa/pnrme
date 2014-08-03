@@ -40,12 +40,43 @@ def predictor():
             waiting_list = get_wl_number(pnr_status_result['passenger_status'][0]['current_status'])
             if waiting_list:
                 #get the boarding time
-                #do prediction
-                return render_template(
-                    'prediction.html',
-                    prediction_form=prediction_form,
-                    pnr_status_result=pnr_status_result
-                )
+                schedule = get_train_schedule(pnr_status_result["train_number"], db["train_schedule"])
+                boarding_time = get_boarding_time(pnr_status_result["boarding_date"],
+                                                  pnr_status_result["boarding_point"], schedule)
+                train_number = pnr_status_result['train_number']
+                result = []
+                train_class = pnr_status_result['class']
+                if boarding_time:
+                    hours_before = get_hours(boarding_time, datetime.now())
+                    for passenger in pnr_status_result['passenger_status']:
+                        quota = get_quota_from_pnr(passenger['booking_status'])
+                        curr_status = passenger['current_status']
+                        wl = get_wl_number(curr_status)
+                        if wl:
+                            individual_prediction = get_prediction([{'train': train_number}, {'quota': quota},
+                                                                    {'class': train_class}], hours_before, wl)
+                        else:
+                            individual_prediction = {
+                                "data": [],
+                                "prediction_val": 1,
+                                "message": "Your ticket is already confirmed",
+                                "probability": 100,
+                                "prediction": True
+                            }
+                        result.append(individual_prediction)
+                    return render_template(
+                        'prediction.html',
+                        prediction_form=prediction_form,
+                        pnr_status_result=pnr_status_result,
+                        prediction_result=result
+                    )
+                else:
+                    #send an error message saying boarding time could not be fetched
+                    return render_template(
+                        'prediction.html',
+                        prediction_form=prediction_form,
+                        pnr_status_result=pnr_status_result
+                    )
             else:
                 return render_template(
                     'prediction.html',
